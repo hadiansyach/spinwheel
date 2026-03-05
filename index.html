@@ -906,7 +906,7 @@ Diana"
     _lw=wi;
     document.getElementById('resultName').textContent=nm;
     document.getElementById('resultOverlay').classList.add('show');
-    _wh.unshift(nm);if(_wh.length>10)_wh.pop();
+    _wh.push(nm);if(_wh.length>10)_wh.pop();
     _rh();switchTab('winners');_lc();_ws();
   }
 
