@@ -168,9 +168,14 @@
 
   .wheel-wrapper {
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    align-items: center;
+    background:
+      radial-gradient(ellipse 70% 60% at 30% 20%, rgba(233,69,96,0.07) 0%, transparent 65%),
+      radial-gradient(ellipse 60% 70% at 80% 80%, rgba(99,102,241,0.07) 0%, transparent 65%),
+      radial-gradient(ellipse 50% 50% at 60% 10%, rgba(245,166,35,0.05) 0%, transparent 60%),
+      linear-gradient(160deg, #fafafa 0%, #f0f4ff 50%, #fff5f7 100%);
   }
 
   .wheel-area {
@@ -181,17 +186,12 @@
     justify-content: center;
     padding: 40px 24px;
     gap: 28px;
-    background:
-      radial-gradient(ellipse 70% 60% at 30% 20%, rgba(233,69,96,0.07) 0%, transparent 65%),
-      radial-gradient(ellipse 60% 70% at 80% 80%, rgba(99,102,241,0.07) 0%, transparent 65%),
-      radial-gradient(ellipse 50% 50% at 60% 10%, rgba(245,166,35,0.05) 0%, transparent 60%),
-      linear-gradient(160deg, #fafafa 0%, #f0f4ff 50%, #fff5f7 100%);
   }
 
   .wheel-container {
     position: relative;
-    width: min(708px, 82vw);
-    height: min(708px, 82vw);
+    width: min(80vh, 900px);
+    height: min(80vh, 900px);
   }
 
   #wheelCanvas {
@@ -204,7 +204,7 @@
   /* Pointer */
   .wheel-pointer {
     position: absolute;
-    right: -12px;
+    right: -14px;
     top: 50%;
     transform: translateY(-50%);
     width: 0;
@@ -212,7 +212,7 @@
     border-top: 16px solid transparent;
     border-bottom: 16px solid transparent;
     border-right: 32px solid #333;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.584));
     z-index: 10;
   }
 
@@ -320,6 +320,10 @@
     .app { flex-direction: column; }
     .sidebar { width: 100%; min-width: unset; border-right: none; border-bottom: 1px solid var(--border); }
     .names-textarea { min-height: 120px; }
+    .wheel-container{
+      width: min(90vw, 520px);
+      height: min(90vw, 520px);
+    }
   }
 
   /* SIDEBAR TABS */
@@ -456,14 +460,20 @@
     filter: drop-shadow(0 2px 4px rgba(233, 69, 96, 0.2));
   }
 
+  .info-panel {
+    height:100%;
+    display:flex;
+    align-items:flex-start;
+    justify-content:flex-start;
+    padding:20px;
+  }
+
   .title-block {
     display: flex;
     flex-direction: column;
     gap: 4px;
     text-align: right;
-    position: absolute;
-    top: 16px;
-    right: 24px;
+    position: relative;
     z-index: 10;
     background: rgba(233,69,96,0.05);
     border: 1px solid rgba(233,69,96,0.15);
@@ -471,8 +481,8 @@
     padding: 8px 14px 8px 36px;
     cursor: text;
     transition: border-color 0.2s, background 0.2s;
-    min-width: 160px;
-    max-width: 320px;
+    min-width: 100%;
+    max-width: 100%;
   }
 
   .title-block::before {
@@ -481,7 +491,7 @@
     position: absolute;
     top: 6px;
     left: 8px;
-    opacity: 0.8;
+    opacity: 0;
     transition: opacity 0.2s;
   }
 
@@ -510,7 +520,7 @@
     font-family: 'Poppins', sans-serif;
     font-size: 1.3rem;
     font-weight: 800;
-    text-align: right;
+    text-align: left;
     color: var(--text);
     outline: none;
     cursor: text;
@@ -518,6 +528,8 @@
     min-height: 1.3em;
     display: block;
     line-height: 1.2;
+    word-break: break-word;
+    overflow-wrap: anywhere;
   }
 
   .title-text:empty::before {
@@ -529,17 +541,24 @@
     font-size: 0.9rem;
     font-weight: 500;
     color: #555;
-    text-align: right;
+    text-align: left;
     outline: none;
     cursor: text;
     min-width: 80px;
     min-height: 1.2em;
     display: block;
+    word-break: break-word;
+    overflow-wrap: anywhere;
   }
 
   .desc-text:empty::before {
     content: 'Description';
     color: #ccc;
+  }
+
+  #wheelRotate{
+    backface-visibility:hidden;
+    transform-origin:center center;
   }
 
   /* Scrollbar */
@@ -612,22 +631,25 @@ Diana"
   </aside>
 
   <div class="wheel-wrapper">
-    <div class="title-block">
-      <span class="title-text" contenteditable="true" spellcheck="false">Title</span>
-      <span class="desc-text" contenteditable="true" spellcheck="false">Description</span>
-    </div>
-
     <main class="wheel-area">
       <div class="wheel-container" id="wheelContainer" onclick="doSpin()" style="cursor:pointer;">
         <div class="empty-wheel" id="emptyState" style="cursor:default;">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 2v10l6 3"/></svg>
           <div>Add names on the left<br>and the wheel will appear</div>
         </div>
-        <canvas id="wheelCanvas" style="display:none;"></canvas>
+        <div id="wheelRotate">
+          <canvas id="wheelCanvas" style="display:none;"></canvas>
+        </div>
         <div class="wheel-pointer" id="wheelPointer" style="display:none;"></div>
       </div>
-  
     </main>
+    <aside class="info-panel">
+      <div class="title-block">
+        <span class="title-text" contenteditable="true" spellcheck="false">Title</span>
+        <span class="desc-text" contenteditable="true" spellcheck="false">Description</span>
+      </div>
+    </aside>
+
   </div>
 </div>
 
@@ -655,6 +677,10 @@ Diana"
   const _ac=new(window.AudioContext||window.webkitAudioContext)();
   const _cc=document.getElementById('confettiCanvas');
   const _cx=_cc.getContext('2d');
+
+  function _rt(angle){
+    document.getElementById("wheelRotate").style.transform = `rotate(${angle}rad)`;
+  }
 
   function _p(t){
     const _l=t.split('\n');
@@ -696,6 +722,7 @@ Diana"
     document.getElementById('wheelCanvas').style.display='block';
     document.getElementById('wheelPointer').style.display='block';
     _a=0;_dw(0);
+    _rt(0);
   }
 
   function _dw(rot){
@@ -737,7 +764,7 @@ Diana"
     const gain = _ac.createGain();
     
     osc.type = 'sine';
-    osc.frequency.setValueAtTime(1000 + (speedFactor * 300), t); 
+    osc.frequency.setValueAtTime(800 + (speedFactor * 600), t); 
     osc.frequency.exponentialRampToValueAtTime(800, t + 0.03);
     gain.gain.setValueAtTime(volume, t);
     gain.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
@@ -789,19 +816,37 @@ Diana"
     const sa=(2*Math.PI)/_n.length;
     const ti=(_x>=0&&_x<_n.length)?_x:Math.floor(Math.random()*_n.length);
     const ba=Math.PI/2-(ti+0.5)*sa;
-    const ex=(16 + Math.floor(Math.random()*5))*2*Math.PI; 
+    // const ex=(12 + Math.floor(Math.random()*12))*2*Math.PI;
+    const ex=(12 + Math.random()*12)*2*Math.PI;
     // const side = Math.random() > 0.5 ? 1 : -1;
     // const bias = Math.pow(Math.random(), 0.3);
     // const jt = side * bias * (sa * 0.47);
-    const isEdge = Math.random() > 0.35;
-    let jt;
 
-    if (isEdge) {
-      const side = Math.random() > 0.5 ? 1 : -1;
-      const extremeBias = 0.43 + (Math.pow(Math.random(), 0.1) * 0.06); 
-      jt = side * extremeBias * sa;
-    } else {
-      jt = (Math.random() - 0.5) * (sa * 0.5); 
+    // const isEdge = Math.random() > 0.35;
+    // let jt;
+
+    // if (isEdge) {
+    //   const side = Math.random() > 0.5 ? 1 : -1;
+    //   const extremeBias = 0.43 + (Math.pow(Math.random(), 0.1) * 0.06); 
+    //   jt = side * extremeBias * sa;
+    // } else {
+    //   jt = (Math.random() - 0.5) * (sa * 0.5); 
+    // }
+
+    let jt;
+    const r = Math.random();
+    if (r < 0.45) {
+      const side = Math.random() < 0.5 ? -1 : 1;
+      const bias = 0.38 + Math.random()*0.08;
+      jt = side * sa * bias;
+    }
+    else if (r < 0.80) {
+      const side = Math.random() < 0.5 ? -1 : 1;
+      const bias = 0.18 + Math.random()*0.15;
+      jt = side * sa * bias;
+    }
+    else {
+      jt = (Math.random()-0.5) * sa * 0.20;
     }
     const fa=ba+ex+jt;
     const cm=((_a%(2*Math.PI))+2*Math.PI)%(2*Math.PI);
@@ -814,13 +859,14 @@ Diana"
     let _lt=0;
     let _lastTickVal = Math.floor((_a - Math.PI / 2) / sa);
     
-    const _e = t => 1 - Math.pow(1 - t, 4);
+    const _e = t => 1 - Math.pow(1 - t, 5);
 
     function _af(now){
       const el=now-t0, t=Math.min(el/dur,1), e=_e(t);
       const ag=st+ts*e; 
       _a=ag; 
-      _dw(ag);
+      // _dw(ag);
+      _rt(ag);
 
       const tn=Math.min((el+16)/dur,1);
       const sp=Math.abs((_e(tn)-e)*ts/0.016);
@@ -837,7 +883,10 @@ Diana"
       if(t<1){
         requestAnimationFrame(_af);
       } else {
-        _a=en;_dw(en);_s=false;setTimeout(() => _sr(_n[ti],ti), 600);
+        _a=en;
+        // _dw(en);
+        _rt(en);
+        _s=false;setTimeout(() => _sr(_n[ti],ti), 600);
       }
     }
     requestAnimationFrame(_af);
