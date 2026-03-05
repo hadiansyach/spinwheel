@@ -816,37 +816,20 @@ Diana"
     const sa=(2*Math.PI)/_n.length;
     const ti=(_x>=0&&_x<_n.length)?_x:Math.floor(Math.random()*_n.length);
     const ba=Math.PI/2-(ti+0.5)*sa;
-    // const ex=(12 + Math.floor(Math.random()*12))*2*Math.PI;
-    const ex=(12 + Math.random()*12)*2*Math.PI;
+    const ex=(12 + Math.floor(Math.random()*12))*2*Math.PI;
     // const side = Math.random() > 0.5 ? 1 : -1;
     // const bias = Math.pow(Math.random(), 0.3);
     // const jt = side * bias * (sa * 0.47);
 
-    // const isEdge = Math.random() > 0.35;
-    // let jt;
-
-    // if (isEdge) {
-    //   const side = Math.random() > 0.5 ? 1 : -1;
-    //   const extremeBias = 0.43 + (Math.pow(Math.random(), 0.1) * 0.06); 
-    //   jt = side * extremeBias * sa;
-    // } else {
-    //   jt = (Math.random() - 0.5) * (sa * 0.5); 
-    // }
-
+    const isEdge = Math.random() > 0.45;
     let jt;
-    const r = Math.random();
-    if (r < 0.45) {
-      const side = Math.random() < 0.5 ? -1 : 1;
-      const bias = 0.38 + Math.random()*0.08;
-      jt = side * sa * bias;
-    }
-    else if (r < 0.80) {
-      const side = Math.random() < 0.5 ? -1 : 1;
-      const bias = 0.18 + Math.random()*0.15;
-      jt = side * sa * bias;
-    }
-    else {
-      jt = (Math.random()-0.5) * sa * 0.20;
+
+    if (isEdge) {
+      const side = Math.random() > 0.5 ? 1 : -1;
+      const extremeBias = 0.25 + (Math.pow(Math.random(), 0.1) * 0.24);
+      jt = side * extremeBias * sa;
+    } else {
+      jt = (Math.random() - 0.5) * (sa * 0.5); 
     }
     const fa=ba+ex+jt;
     const cm=((_a%(2*Math.PI))+2*Math.PI)%(2*Math.PI);
